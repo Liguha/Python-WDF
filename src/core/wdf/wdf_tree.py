@@ -4,6 +4,7 @@ from uuid import uuid4
 from weakref import proxy, ProxyType
 from .wdf_nodes import WDFElement, WDFLinearElement, WDFNonlinearElement, WDFAdaptor
 from .wdf_adaptors import STypeAdaptor, PTypeAdaptor, RTypeAdaptor
+from ...components import CIRCUIT_TO_WDF
 from ...utils import unproxy, SPQRTree, SPQRTreeNode
 
 __all__ = ["WDFTreeNode", "WDFTree"]
@@ -16,6 +17,7 @@ class WDFTreeNode:
         self._element: WDFElement = element
         self._key: str = key
         self._childs: list[WDFTreeNode] = childs if childs is not None else []
+        self.spqr_node: SPQRTreeNode | None = None
 
     @property
     def dtype(self) -> type:
@@ -49,6 +51,10 @@ class WDFTreeNode:
         return len(self.childs) == 0
     
     @property
+    def port_resistance(self) -> float:
+        return self._element.port_resistance
+    
+    @property
     def reflected_wave(self) -> np.ndarray:
         return self._element.reflected_wave
     
@@ -78,7 +84,7 @@ class WDFTree:
         self._nodes: dict[str, WDFTreeNode] = {}
         self._parse_spqr_tree(samplerate, spqr)
         # root select
-        priorities = [WDFNonlinearElement, WDFAdaptor]  # TODO: add R type adaptor
+        priorities = [WDFNonlinearElement, RTypeAdaptor, WDFAdaptor]
         rooted: bool = False
         for dtype in priorities:
             if rooted:
@@ -89,7 +95,7 @@ class WDFTree:
                 self._set_root(node)
                 rooted = True
                 break
-        # TODO: postinit
+        self._post_init()
 
     def __getitem__(self, key: str) -> WDFTreeNode:
         return self._nodes[key]
@@ -107,7 +113,7 @@ class WDFTree:
                 for port in ports:
                     if port.n_nodes != 2:
                         continue
-                    child = WDFTreeNode(port.key, port.element) # TODO: change from CircuitElement to WDFElement
+                    child = WDFTreeNode(port.key, CIRCUIT_TO_WDF[type(port.element)](samplerate, port.element))
                     self._nodes[port.key] = child
                     childs.append(child)
             for child_node in spqr.adjacency_list[node]:
@@ -116,6 +122,7 @@ class WDFTree:
                 child = parse_node(node, child_node)
                 childs.append(child)
             parsed_node = WDFTreeNode(str(uuid4()), element, childs)
+            parsed_node.spqr_node = node
             self._nodes[parsed_node.key] = parsed_node
             for child in childs:
                 child.parent = parsed_node
@@ -139,6 +146,10 @@ class WDFTree:
             return False
         dfs(self.root)
         self._root = new_root
+
+    def _post_init(self) -> None:
+        # TODO: port adapatation
+        pass
     
     @property
     def root(self) -> WDFTreeNode:

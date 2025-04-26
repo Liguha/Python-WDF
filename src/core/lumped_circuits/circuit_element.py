@@ -1,7 +1,8 @@
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
+from sage.all import Rational
 
-__all__ = ["CircuitElement"]
+__all__ = ["CircuitElement", "ReplaceableElement", "MNAStampedElement"]
 
 @dataclass(frozen=True)
 class CircuitElement:
@@ -11,7 +12,12 @@ class ReplaceableElement(ABC):
     @staticmethod
     @abstractmethod
     def replacement(element: 'LumpedElement', free_node: int) -> list['LumpedElement']: # type: ignore
+        '''Return list of new lumped elements, which should be used instead old one.'''
         pass
 
 class MNAStampedElement(ABC):
-    pass
+    @abstractmethod
+    def mna_stamp(self, nodes: tuple[int, ...], port: int, 
+                  num_nodes: int, num_ports: int) -> dict[tuple[int, int], int | Rational]:
+        '''Return element of MNA matrxi with corresponding position.'''
+        pass

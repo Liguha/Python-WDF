@@ -2,7 +2,7 @@ import numpy as np
 from abc import ABC, abstractmethod
 from typing import Any
 
-__all__ = ["WDFElement", "WDFLinearElement", "WDFNonlinearElement", "WDFAdaptor"]
+__all__ = ["WDFElement", "WDFLinearElement", "WDFNonlinearElement", "WDFAdaptor", "WDFDynamicElement"]
 
 class WDFElement(ABC):
     def __init__(self, samplerate: int) -> None:
@@ -28,9 +28,9 @@ class WDFElement(ABC):
     def port_resistance(self) -> float:
         pass
 
-    @abstractmethod
     def reset(self) -> None:
-        pass
+        self._a = np.zeros(self._a.shape, dtype=float)
+        self._b = np.zeros(self._b.shape, dtype=float)
 
 
 class WDFLinearElement(WDFElement):
@@ -64,4 +64,9 @@ class WDFAdaptor(WDFLinearElement):
 
     @abstractmethod
     def update_scaterring_matrix(self, *args, **kwds) -> None:
+        pass
+
+class WDFDynamicElement(ABC):
+    @abstractmethod
+    def set_sample_data(self, data: Any) -> None:
         pass

@@ -3,7 +3,7 @@ from dataclasses import dataclass
 from typing import Literal, Self
 from sage.all import Graph
 from sage.graphs.connectivity import TriconnectivitySPQR
-from ..core.lumped_circuits import Netlist, LumpedElement
+from ..core import Netlist, LumpedElement
 
 __all__ = ["SPQRTreeNode", "SPQRTree"]
 
