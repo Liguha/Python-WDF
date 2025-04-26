@@ -2,7 +2,7 @@ import numpy as np
 from abc import ABC, abstractmethod
 from typing import Any
 
-__all__ = ["WDFElement", "WDFLinearElement", "WDFnonlinearElement", "WDFAdaptor"]
+__all__ = ["WDFElement", "WDFLinearElement", "WDFNonlinearElement", "WDFAdaptor"]
 
 class WDFElement(ABC):
     def __init__(self, samplerate: int) -> None:
@@ -18,13 +18,13 @@ class WDFElement(ABC):
     def incident_wave(self) -> np.ndarray:
         return self._a
     
-    @abstractmethod
     @incident_wave.setter
+    @abstractmethod
     def incident_wave(self, value: Any) -> None:
         pass
 
-    @abstractmethod
     @property
+    @abstractmethod
     def port_resistance(self) -> float:
         pass
 
@@ -52,6 +52,15 @@ class WDFAdaptor(WDFLinearElement):
         super().__init__(samplerate)
         self._S_matrix: np.ndarray | None = None    # shortcut for scattering matrix
         self.update_scaterring_matrix()
+
+    @WDFLinearElement.incident_wave.setter
+    def incident_wave(self, value: np.ndarray | float) -> None:
+        if isinstance(value, np.ndarray):
+            shift: int = len(value) - len(self._a)
+            self._a[shift:] = value
+        else:
+            self._a[0] = value
+        self._b = np.dot(self._S_matrix, self._a)
 
     @abstractmethod
     def update_scaterring_matrix(self, *args, **kwds) -> None:

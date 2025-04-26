@@ -1,0 +1,6 @@
+name: wdf
+channels:
+  - conda-forge
+  - nodefaults
+dependencies:
+  - sage
