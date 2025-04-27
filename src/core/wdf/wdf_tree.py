@@ -77,6 +77,11 @@ class WDFTreeNode:
         for idx, child in enumerate(self.childs):
             child.incident_wave = self.reflected_wave[idx + shift]
 
+    def reset(self) -> None:
+        self._element.reset()
+        for child in self.childs:
+            child.reset()
+
     
 class WDFTree:
     def __init__(self, samplerate: int, spqr: SPQRTree) -> None:
@@ -174,3 +179,6 @@ class WDFTree:
             for child in node.childs:
                 propogate_wave(child)
         propogate_wave(self._root)
+
+    def reset(self) -> None:
+        self.root.reset()

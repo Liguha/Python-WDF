@@ -7,12 +7,14 @@ __all__ = ["Resistor", "OpenCircuit", "Capacitor", "Inductor", "IdealVoltageSour
 
 @dataclass(frozen=True)
 class Resistor(CircuitElement, MNAStampedElement):
-    R: float
+    R: float | Rational
 
     @override
     def mna_stamp(self, nodes: tuple[int, ...], port: int, 
-            num_nodes: int, num_ports: int) -> dict[tuple[int, int], int | Rational]:
-        r = Rational(self.R)
+                  num_nodes: int, num_ports: int) -> dict[tuple[int, int], int | Rational]:
+        r = self.R
+        if isinstance(self.R, int | float):
+            r = Rational(float(self.R))
         i, j = nodes
         res = {}
         res[(i, i)] = 1 / r
@@ -55,6 +57,6 @@ class IdealVoltageSource(CircuitElement, MNAStampedElement):
 
 
 @dataclass(frozen=True)
-class VoltageSource(CircuitElement, MNAStampedElement):
+class VoltageSource(CircuitElement):
     R: float
     Vs: float | None = None
