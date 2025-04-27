@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 from sage.all import Rational, var
+from typing import override
 from ..core import CircuitElement, ReplaceableElement, MNAStampedElement
 
 __all__ = ["Resistor", "OpenCircuit", "Capacitor", "Inductor", "IdealVoltageSource", "VoltageSource"]
@@ -8,6 +9,7 @@ __all__ = ["Resistor", "OpenCircuit", "Capacitor", "Inductor", "IdealVoltageSour
 class Resistor(CircuitElement, MNAStampedElement):
     R: float
 
+    @override
     def mna_stamp(self, nodes: tuple[int, ...], port: int, 
             num_nodes: int, num_ports: int) -> dict[tuple[int, int], int | Rational]:
         r = Rational(self.R)
@@ -39,6 +41,7 @@ class Inductor(CircuitElement):
 class IdealVoltageSource(CircuitElement, MNAStampedElement):
     Vs: float | None = None
 
+    @override
     def mna_stamp(self, nodes: tuple[int, ...], port: int, 
                 num_nodes: int, num_ports: int) -> dict[tuple[int, int], int | Rational]:
         res: dict = {}

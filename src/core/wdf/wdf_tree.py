@@ -148,8 +148,12 @@ class WDFTree:
         self._root = new_root
 
     def _post_init(self) -> None:
-        # TODO: port adapatation
-        pass
+        def dfs(node: WDFTreeNode) -> None:
+            for child in node.childs:
+                dfs(child)
+            if issubclass(node.dtype, WDFAdaptor):
+                node._element.update_scaterring_matrix(node)
+        dfs(self.root)
     
     @property
     def root(self) -> WDFTreeNode:

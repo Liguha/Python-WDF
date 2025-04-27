@@ -1,6 +1,6 @@
 import numpy as np
 from abc import ABC, abstractmethod
-from typing import Any
+from typing import Any, override
 
 __all__ = ["WDFElement", "WDFLinearElement", "WDFNonlinearElement", "WDFAdaptor", "WDFDynamicElement"]
 
@@ -39,6 +39,7 @@ class WDFLinearElement(WDFElement):
         self._Rp: float | None = None               # shortcut for port resistance
 
     @property
+    @override
     def port_resistance(self) -> float:
         return self._Rp
     
@@ -51,7 +52,6 @@ class WDFAdaptor(WDFLinearElement):
     def __init__(self, samplerate: int) -> None:
         super().__init__(samplerate)
         self._S_matrix: np.ndarray | None = None    # shortcut for scattering matrix
-        self.update_scaterring_matrix()
 
     @WDFLinearElement.incident_wave.setter
     def incident_wave(self, value: np.ndarray | float) -> None:

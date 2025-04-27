@@ -1,4 +1,5 @@
 import numpy as np
+from typing import override
 from ..core import WDFLinearElement, WDFDynamicElement
 from .circuit_elements import (Resistor, Inductor, 
                                Capacitor, VoltageSource)
@@ -11,7 +12,7 @@ class WDFResistor(WDFLinearElement):
         self._a: np.ndarray = np.zeros(1, dtype=float)
         self._b: np.ndarray = np.zeros(1, dtype=float)
         self._Rp: float = resistor.R
-
+    
     @WDFLinearElement.incident_wave.setter
     def incident_wave(self, value: float | np.ndarray) -> None:
         if not isinstance(value, float):
@@ -82,5 +83,6 @@ class WDFVoltageSource(WDFLinearElement, WDFDynamicElement):
         self._a[0] = value
         self._b[0] = self._vs
 
+    @override
     def set_sample_data(self, data: float) -> None:
         self._vs = data

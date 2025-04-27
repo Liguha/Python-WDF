@@ -1,6 +1,9 @@
+from __future__ import annotations
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from sage.all import Rational
+from typing import TYPE_CHECKING
+if TYPE_CHECKING: from .circuit_element import LumpedElement
 
 __all__ = ["CircuitElement", "ReplaceableElement", "MNAStampedElement"]
 
@@ -11,7 +14,7 @@ class CircuitElement:
 class ReplaceableElement(ABC):
     @staticmethod
     @abstractmethod
-    def replacement(element: 'LumpedElement', free_node: int) -> list['LumpedElement']: # type: ignore
+    def replacement(element: LumpedElement, free_node: int) -> list[LumpedElement]: # type: ignore
         '''Return list of new lumped elements, which should be used instead old one.'''
         pass
 

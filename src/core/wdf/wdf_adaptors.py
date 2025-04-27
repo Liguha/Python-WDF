@@ -1,11 +1,14 @@
-import numpy as np
+from __future__ import annotations
+from typing import override, TYPE_CHECKING
 from .wdf_nodes import WDFAdaptor
-from  .wdf_tree import WDFTreeNode
+if TYPE_CHECKING: from .wdf_tree import WDFTreeNode
+import numpy as np
 
 __all__ = ["STypeAdaptor", "PTypeAdaptor", "RTypeAdaptor"]
 
 class STypeAdaptor(WDFAdaptor):
-    def update_scaterring_matrix(self, node: WDFTreeNode) -> None:
+    @override
+    def update_scaterring_matrix(self, node: WDFTreeNode) -> None: # type: ignore
         resistances: list = [child.port_resistance for child in node.childs]
         self._Rp = np.sum(resistances, dtype=float)
         if not node.is_root:
@@ -23,7 +26,8 @@ class STypeAdaptor(WDFAdaptor):
 
 
 class PTypeAdaptor(WDFAdaptor):
-    def update_scaterring_matrix(self, node: WDFTreeNode) -> None:
+    @override
+    def update_scaterring_matrix(self, node: WDFTreeNode) -> None: # type: ignore
         inv_resistances = [1 / child.port_resistance for child in node.childs]
         self._Rp = 1 / np.sum(inv_resistances, dtype=float)
         if not node.is_root:
@@ -41,5 +45,6 @@ class PTypeAdaptor(WDFAdaptor):
 
 
 class RTypeAdaptor(WDFAdaptor):
-    def update_scaterring_matrix(self, node: WDFTreeNode) -> None:
+    @override
+    def update_scaterring_matrix(self, node: WDFTreeNode) -> None: # type: ignore
         return None
