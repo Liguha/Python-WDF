@@ -45,9 +45,9 @@ class WDFInductor(WDFLinearElement):
 
     @WDFLinearElement.incident_wave.setter
     def incident_wave(self, value: float | np.ndarray) -> None:
-        self._b[0] = self._a[0]
         if not isinstance(value, float):
             value = value[0]
+        self._b[0] = -value
         self._a[0] = value
 
 
@@ -60,9 +60,9 @@ class WDFCapacitor(WDFLinearElement):
 
     @WDFLinearElement.incident_wave.setter
     def incident_wave(self, value: float | np.ndarray) -> None:
-        self._b[0] = -self._a[0]
         if not isinstance(value, float):
             value = value[0]
+        self._b[0] = value
         self._a[0] = value
 
 
@@ -86,3 +86,4 @@ class WDFVoltageSource(WDFLinearElement, WDFDynamicElement):
     @override
     def set_sample_data(self, data: float) -> None:
         self._vs = data
+        self._b[0] = self._vs

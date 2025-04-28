@@ -1,9 +1,10 @@
+from __future__ import annotations
 import warnings
 from dataclasses import dataclass
-from typing import Literal, Self
+from typing import Literal, Self, TYPE_CHECKING
 from sage.all import Graph
 from sage.graphs.connectivity import TriconnectivitySPQR
-from ..core import Netlist, LumpedElement
+if TYPE_CHECKING: from ..core import Netlist, LumpedElement
 
 __all__ = ["SPQRTreeNode", "SPQRTree"]
 

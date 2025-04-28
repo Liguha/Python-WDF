@@ -2,10 +2,12 @@ from __future__ import annotations
 from sage.all import var
 from uuid import uuid4
 from .spqr_tree import SPQRTreeNode
-from ..core import LumpedElement, Netlist, WDFAdaptor
+from ..core import LumpedElement, Netlist
 from ..components import Resistor, IdealVoltageSource
 from typing import TYPE_CHECKING
-if TYPE_CHECKING: from ..core.wdf.wdf_tree import WDFTreeNode
+if TYPE_CHECKING: 
+    from ..core.wdf.wdf_tree import WDFTreeNode
+    from ..core import WDFAdaptor
 
 __all__ = ["construct_thevenin"]
 

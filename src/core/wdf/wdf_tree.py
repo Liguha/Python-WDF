@@ -2,7 +2,7 @@ import numpy as np
 from typing import Any, Self
 from uuid import uuid4
 from weakref import proxy, ProxyType
-from .wdf_nodes import WDFElement, WDFLinearElement, WDFNonlinearElement, WDFAdaptor
+from .wdf_nodes import WDFElement, WDFNonlinearElement, WDFAdaptor, WDFDynamicElement
 from .wdf_adaptors import STypeAdaptor, PTypeAdaptor, RTypeAdaptor
 from ...components import CIRCUIT_TO_WDF
 from ...utils import unproxy, SPQRTree, SPQRTreeNode
@@ -18,6 +18,8 @@ class WDFTreeNode:
         self._key: str = key
         self._childs: list[WDFTreeNode] = childs if childs is not None else []
         self.spqr_node: SPQRTreeNode | None = None
+        if issubclass(self.dtype, WDFDynamicElement):
+            self.set_sample_data = element.set_sample_data
 
     @property
     def dtype(self) -> type:

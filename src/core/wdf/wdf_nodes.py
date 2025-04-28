@@ -56,7 +56,7 @@ class WDFAdaptor(WDFLinearElement):
     @WDFLinearElement.incident_wave.setter
     def incident_wave(self, value: np.ndarray | float) -> None:
         if isinstance(value, np.ndarray):
-            shift: int = len(value) - len(self._a)
+            shift: int = len(self._a) - len(value)
             self._a[shift:] = value
         else:
             self._a[0] = value
