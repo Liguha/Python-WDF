@@ -4,7 +4,7 @@ from typing import Any
 from .wdf_tree import WDFTree
 from ..lumped_circuits import Netlist, LumpedElement
 from ...components import OpenCircuit
-from ...utils import SPQRTree
+from ..spqr_tree import SPQRTree
 
 __all__ = ["WDFScheme"]
 

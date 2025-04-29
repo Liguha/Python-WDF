@@ -5,7 +5,8 @@ from weakref import proxy, ProxyType
 from .wdf_nodes import WDFElement, WDFNonlinearElement, WDFAdaptor, WDFDynamicElement
 from .wdf_adaptors import STypeAdaptor, PTypeAdaptor, RTypeAdaptor
 from ...components import CIRCUIT_TO_WDF
-from ...utils import unproxy, SPQRTree, SPQRTreeNode
+from ..spqr_tree import SPQRTree, SPQRTreeNode
+from ...utils import unproxy
 
 __all__ = ["WDFTreeNode", "WDFTree"]
 

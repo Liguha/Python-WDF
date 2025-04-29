@@ -66,7 +66,20 @@ class WDFAdaptor(WDFLinearElement):
     def update_scaterring_matrix(self, *args, **kwds) -> None:
         pass
 
-class WDFDynamicElement(ABC):
+class WDFDynamicElement(WDFElement):
     @abstractmethod
     def set_sample_data(self, data: Any) -> None:
         pass
+
+    def store_defaults(self, dynamics: list[str]) ->  None:
+        self._defaults: dict[str] = {}
+        for param in dynamics:
+            self._defaults[param] = getattr(self, param)
+    
+    @override
+    def reset(self) -> None:
+        super().reset()
+        if not hasattr(self, "_defaults"):
+            return
+        for name, value in self._defaults.items():
+            setattr(self, name, value)

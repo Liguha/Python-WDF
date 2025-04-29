@@ -73,6 +73,7 @@ class WDFVoltageSource(WDFLinearElement, WDFDynamicElement):
         self._b: np.ndarray = np.zeros(1, dtype=float)
         self._Rp: float = voltage_source.R
         self._vs: float = voltage_source.Vs
+        self.store_defaults(["_vs"])
 
     @WDFLinearElement.incident_wave.setter
     def incident_wave(self, value: float | np.ndarray) -> None:
