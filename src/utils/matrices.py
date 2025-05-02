@@ -4,9 +4,9 @@ import numpy as np
 from sage.all import SR, Expression, identity_matrix, matrix, solve
 from sage.matrix.matrix0 import Matrix
 from typing import TYPE_CHECKING
+from ..components import Resistor
 if TYPE_CHECKING:
     from ..core import Netlist, MNAStampedElement, CircuitElement
-    from ..components import Resistor
 
 __all__ = ["construct_scattering"]
 

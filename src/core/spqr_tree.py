@@ -71,7 +71,7 @@ class SPQRTree:
             real_verticies = [v for v in graph.vertices() if v < free_node]
             subgraph = graph.subgraph(real_verticies)
             edges = set(graph.edges())
-            node_elements = {k: v for k, v in elements.items() if (*k, None) in edges}
+            node_elements = {k: v for k, v in elements.items() if (*k, None) in edges or len(k) > 2}
             node = SPQRTreeNode(node_type, subgraph, node_elements)
             if node not in self.adjacency_list:
                 self.adjacency_list[node] = []

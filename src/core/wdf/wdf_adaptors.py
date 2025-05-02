@@ -49,7 +49,8 @@ class RTypeAdaptor(WDFAdaptor):
     @override
     def update_scaterring_matrix(self, node: WDFTreeNode) -> None:
         thevenin = construct_thevenin(node)
-        self._S_matrix, self._Rp = construct_scattering(thevenin)
+        adapted_port: int = -1 if node.is_root else 0
+        self._S_matrix, self._Rp = construct_scattering(thevenin, adapted_port)
         n_ports: int = self._S_matrix.shape[0]
         self._a = np.zeros(n_ports, dtype=float)
         self._b = np.zeros(n_ports, dtype=float)

@@ -18,6 +18,14 @@ class WDFScheme:
         for id, nodes in zip(self._output_ids, outputs):
             modified_netlist.add_element(LumpedElement(id, OpenCircuit(), nodes))
         modified_netlist.perform_replacements()
+        # trick to avoid constrcution of R-adaptors with only 2 ports
+        for element in modified_netlist.values():
+            if element.n_nodes <= 2:
+                continue
+            i, j, k, *_ = element.nodes
+            modified_netlist.add_element(LumpedElement(str(uuid4()), OpenCircuit(), (i, j)))
+            modified_netlist.add_element(LumpedElement(str(uuid4()), OpenCircuit(), (j, k)))
+            modified_netlist.add_element(LumpedElement(str(uuid4()), OpenCircuit(), (i, k)))
         self._wdf_tree: WDFTree = WDFTree(samplerate, SPQRTree(modified_netlist))
 
     def process_sample(self, sample: dict[str, Any], 

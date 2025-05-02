@@ -55,10 +55,11 @@ class Netlist:
         while changed:
             changed = False
             for element in self.values():
-                if not isinstance(element, ReplaceableElement):
+                elem: CircuitElement = element.element
+                if not isinstance(elem, ReplaceableElement):
                     continue
                 changed = True
-                replacement = element.replacement(element, self.free_node())
+                replacement = elem.replacement(element, self.free_node())
                 self.remove_element(element)
                 for new_elem in replacement:
                     self.add_element(new_elem)
