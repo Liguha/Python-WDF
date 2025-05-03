@@ -6,5 +6,7 @@ CIRCUIT_TO_WDF: dict[type, type] = {
     OpenCircuit: WDFOpenCircuit,
     Inductor: WDFInductor,
     Capacitor: WDFCapacitor,
-    VoltageSource: WDFVoltageSource
+    VoltageSource: WDFVoltageSource,
+    Trimmer: WDFTrimmer,
+    Diode: WDFDiode
 }

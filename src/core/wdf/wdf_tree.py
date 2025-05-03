@@ -159,6 +159,7 @@ class WDFTree:
         def dfs(node: WDFTreeNode) -> None:
             for child in node.childs:
                 dfs(child)
+            node._element.tree_node = proxy(node)
             if issubclass(node.dtype, WDFAdaptor):
                 node._element.update_scaterring_matrix(node)
         dfs(self.root)

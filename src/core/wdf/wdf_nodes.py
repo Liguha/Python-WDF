@@ -1,6 +1,8 @@
+from __future__ import annotations
 import numpy as np
 from abc import ABC, abstractmethod
-from typing import Any, override
+from typing import Any, override, TYPE_CHECKING
+if TYPE_CHECKING: from .wdf_tree import WDFTreeNode
 
 __all__ = ["WDFElement", "WDFLinearElement", "WDFNonlinearElement", "WDFAdaptor", "WDFDynamicElement"]
 
@@ -9,6 +11,15 @@ class WDFElement(ABC):
         self._samplerate: int  = samplerate
         self._a: np.ndarray | None = None           # shortcur for incident waves
         self._b: np.ndarray | None = None           # shortcut for reflected waves
+        self._tree_node: WDFTreeNode | None = None  # wrapped at property to ensure overriding
+
+    @property
+    def tree_node(self) -> WDFTreeNode:
+        return self._tree_node
+    
+    @tree_node.setter
+    def tree_node(self, node: WDFTreeNode) -> None:
+        self._tree_node = node
 
     @property
     def reflected_wave(self) -> np.ndarray:
@@ -65,6 +76,7 @@ class WDFAdaptor(WDFLinearElement):
     @abstractmethod
     def update_scaterring_matrix(self, *args, **kwds) -> None:
         pass
+
 
 class WDFDynamicElement(WDFElement):
     @abstractmethod
